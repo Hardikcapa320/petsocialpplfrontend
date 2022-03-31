@@ -1,9 +1,7 @@
 import axios from 'axios'
 import React, {useContext, useEffect, useState} from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import Createpost from './Createpost'
+import { Link, useParams } from 'react-router-dom'
 import Newpost from './Newpost'
-import ReactPaginate from 'react-paginate'
 import loginContext from './Context/loginContext'
 import Diffcategory from './Diffcategory'
 export default function Category() {
@@ -24,12 +22,25 @@ export default function Category() {
     }
   
     const [posts, setPosts] = useState([]);
-    const [pgNumber, setPgNumber] = useState(0);
+
+    const [skip, setSkip] = useState(0);
+    const [totalData, setTtldata] = useState(0);
+    let limit = 2;
   
-    const postsPerPage = 2;
-    const postsVisited = pgNumber * postsPerPage;
+    const previousBtn = () => {
+      if(skip)
+      {
+        setSkip(skip - limit);
+      }
+    }
+    const nextBtn = () => {
+      if(skip < totalData)
+      {
+        setSkip(skip + limit);
+      }
+    }
   
-    const displayPosts = posts.slice(postsVisited, postsVisited + postsPerPage).map(post => {
+    const displayPosts = posts.map(post => {
       return(
         <Newpost key={post.title} name= {post.title} image= {post.imgID} tag= {post.category} />
       )
@@ -38,18 +49,18 @@ export default function Category() {
   
   
     const getPosts = () => {
-      axios.get(`http://localhost:9002/category/${id}`)
+      axios.get(`http://localhost:9002/category/${id}/?skip=${skip}&limit=${limit}`)
       .then((res)=> {
         console.log(res.data);
-        setPosts(res.data);
+        setPosts(res.data.posts);
+        setTtldata(res.data.count-2);
       })
     }
-    useEffect(getPosts,[]);
-  
-    const pageCount = Math.ceil(posts.length/postsPerPage);
-    const pageChange = ({selected}) => {
-      setPgNumber(selected);
-    };
+    const makeSkipZero = () => {
+      setSkip(0);
+    }
+    useEffect(getPosts,[id,skip]);
+    useEffect(makeSkipZero,[id])
 
   return (
     <div className="container">
@@ -106,17 +117,10 @@ export default function Category() {
         </div>
         <div className="contnt_2">
           {displayPosts}
-          <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          pageCount={pageCount}
-          onPageChange={pageChange}
-          containerClassName={"paginationBtns"}
-          previousLinkClassName={"previousBtn"}
-          nextLinkClassName={"nextBtn"}
-          disabledClassName={"paginationDisabled"}
-          activeClassName={"paginationActive"}
-          />
+          <div className="paginationbtn">
+              <button onClick={previousBtn}>Previous</button>
+              <button onClick={nextBtn}>Next</button>
+          </div>
         </div>
       </div>
     </div>

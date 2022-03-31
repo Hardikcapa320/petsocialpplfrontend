@@ -10,7 +10,7 @@ export default function Newpost(props) {
       </div>
       <div className="div_top">
         <div className="div_top_lft"><img src={require("./styling/images/img_6.png")} />{props.name}</div>
-        <div className="div_top_rgt"><span className="span_date">{Date.now()}</span><span className="span_time">11:15am</span></div>
+        <div className="div_top_rgt"><span className="span_date">31 March 2022</span><span className="span_time">11:15am</span></div>
       </div>
       <div className="div_image"><img src={props.image} alt="pet" /></div>
       <div className="div_btm">
