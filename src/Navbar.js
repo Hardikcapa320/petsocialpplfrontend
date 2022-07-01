@@ -15,6 +15,7 @@ export default function Navbar() {
   const logouts = () => {
     setUser(undefined);
     setAuth(undefined);
+    localStorage.removeItem("users");
     logout="";
     navigate("/login")
   }
@@ -25,11 +26,19 @@ export default function Navbar() {
           <div className="logo"><a href="#"><img src={require('./styling/images/logo.png')}/></a></div>
           <div className="navigatn">
             <ul>
-              <li><Link to={isAuth?"/home":"/login"}>Home</Link></li>
-              <li><Link to={"/"}>Register</Link></li>
-              <li><Link to={"/login"}>{login}</Link></li>
-              <li><Link to={"/timeline"}>Timeline</Link></li>
-              <li><a href="#" onClick={logouts}>{logout}</a></li>
+              {
+                localStorage.getItem("users") ?
+                <>
+                <li><Link to={isAuth?"/home":"/login"}>Home</Link></li>
+                <li><Link to={"/timeline"}>Timeline</Link></li>
+                <li><a href="#" onClick={logouts}>{logout}</a></li>
+                </>
+                :
+                <>
+                <li><Link to={"/"}>Register</Link></li>
+                <li><Link to={"/login"}>{login}</Link></li>
+                </>
+              }
             </ul>
           </div>
         </div>

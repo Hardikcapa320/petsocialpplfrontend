@@ -1,10 +1,17 @@
-import React,{useRef, useState} from 'react'
+import React,{useRef, useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
 export default function Register() {
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(localStorage.getItem("users"))
+        {
+            navigate("/home");
+        }
+    })
     
     const [user, setUser] = useState({
         username:"",

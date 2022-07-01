@@ -1,6 +1,16 @@
-import React from 'react'
+import React,{useEffect} from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Newpost(props) {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(!localStorage.getItem("users"))
+    {
+      navigate("/");
+    }
+  },[])
   return (
     <div className="contnt_2">
     <div className="div_a">

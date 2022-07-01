@@ -9,6 +9,13 @@ export default function Timeline() {
 
     const navigate = useNavigate();
 
+    useEffect(()=>{
+      if(!localStorage.getItem("users"))
+      {
+        navigate("/");
+      }
+    })
+
     const {user, isAuth} = useContext(loginContext);
     const [countLikes, setLikes] = useState(0);
 
@@ -57,10 +64,6 @@ export default function Timeline() {
             console.log(res.data);
             setPosts(res.data.posts);
             setTtldata(res.data.count-2);
-          }
-          else
-          {
-              navigate("/login");
           }
       })
     }

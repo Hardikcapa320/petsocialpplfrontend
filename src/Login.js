@@ -1,4 +1,4 @@
-import React, {useRef, useContext, useState} from 'react'
+import React, {useRef, useContext, useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -7,6 +7,13 @@ import loginContext from './Context/loginContext'
 export default function Login() {
   const {user, setUser, isAuth, setAuth} = useContext(loginContext); 
   const navigate=useNavigate()
+
+  /*useEffect(() => {
+   if(localStorage.getItem("users"))
+    {
+      navigate("/home");
+    }
+  })*/
 
   const [usr, userState] = useState({
     email:"",
@@ -32,9 +39,10 @@ const login = () => {
   .then(res => {
     if(res.data)
     {
-      setAuth(true)
-      setUser(res.data)
-      navigate("/home")
+      setAuth(true);
+      setUser(res.data);
+      localStorage.setItem("users", JSON.stringify(res.data));
+      navigate("/home");
     }
     else
     {
